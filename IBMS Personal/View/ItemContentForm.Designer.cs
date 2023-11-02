@@ -30,6 +30,7 @@
 		{
 			this.childGroupBox = new System.Windows.Forms.GroupBox();
 			this.questionGroupBox = new System.Windows.Forms.GroupBox();
+			this.questionChildRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.answerGroupBox = new System.Windows.Forms.GroupBox();
 			this.radioButtonFalse = new System.Windows.Forms.RadioButton();
 			this.radioButtonTrue = new System.Windows.Forms.RadioButton();
@@ -51,6 +52,7 @@
 			this.radioButtonD = new System.Windows.Forms.RadioButton();
 			this.radioButtonE = new System.Windows.Forms.RadioButton();
 			this.radioButtonF = new System.Windows.Forms.RadioButton();
+			this.answerRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.questionMainRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.itemChapterComboBox = new System.Windows.Forms.ComboBox();
 			this.itemTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -61,9 +63,6 @@
 			this.labelQuestion = new System.Windows.Forms.Label();
 			this.prevButton = new System.Windows.Forms.Button();
 			this.nextButton = new System.Windows.Forms.Button();
-			this.moveUpButton = new System.Windows.Forms.Button();
-			this.moveDownButton = new System.Windows.Forms.Button();
-			this.closeButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.editButton = new System.Windows.Forms.Button();
 			this.removeButton = new System.Windows.Forms.Button();
@@ -71,8 +70,6 @@
 			this.submitButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.precisionLabel = new System.Windows.Forms.Label();
-			this.questionChildRichTextBox = new System.Windows.Forms.RichTextBox();
-			this.answerRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.childGroupBox.SuspendLayout();
 			this.questionGroupBox.SuspendLayout();
 			this.answerGroupBox.SuspendLayout();
@@ -84,7 +81,7 @@
 			this.childGroupBox.Controls.Add(this.answerGroupBox);
 			this.childGroupBox.Location = new System.Drawing.Point(135, 350);
 			this.childGroupBox.Name = "childGroupBox";
-			this.childGroupBox.Size = new System.Drawing.Size(900, 380);
+			this.childGroupBox.Size = new System.Drawing.Size(900, 465);
 			this.childGroupBox.TabIndex = 12;
 			this.childGroupBox.TabStop = false;
 			this.childGroupBox.Text = "第{0}题  答题准确率：00/00";
@@ -94,11 +91,20 @@
 			this.questionGroupBox.Controls.Add(this.questionChildRichTextBox);
 			this.questionGroupBox.Location = new System.Drawing.Point(10, 30);
 			this.questionGroupBox.Name = "questionGroupBox";
-			this.questionGroupBox.Size = new System.Drawing.Size(880, 115);
+			this.questionGroupBox.Size = new System.Drawing.Size(880, 130);
 			this.questionGroupBox.TabIndex = 36;
 			this.questionGroupBox.TabStop = false;
 			this.questionGroupBox.Text = "问题：";
-			this.questionGroupBox.Visible = false;
+			// 
+			// questionChildRichTextBox
+			// 
+			this.questionChildRichTextBox.Location = new System.Drawing.Point(10, 30);
+			this.questionChildRichTextBox.Name = "questionChildRichTextBox";
+			this.questionChildRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.questionChildRichTextBox.Size = new System.Drawing.Size(860, 90);
+			this.questionChildRichTextBox.TabIndex = 1;
+			this.questionChildRichTextBox.TabStop = false;
+			this.questionChildRichTextBox.Text = "";
 			// 
 			// answerGroupBox
 			// 
@@ -123,10 +129,9 @@
 			this.answerGroupBox.Controls.Add(this.radioButtonE);
 			this.answerGroupBox.Controls.Add(this.radioButtonF);
 			this.answerGroupBox.Controls.Add(this.answerRichTextBox);
-			this.answerGroupBox.Enabled = false;
-			this.answerGroupBox.Location = new System.Drawing.Point(10, 155);
+			this.answerGroupBox.Location = new System.Drawing.Point(10, 165);
 			this.answerGroupBox.Name = "answerGroupBox";
-			this.answerGroupBox.Size = new System.Drawing.Size(880, 215);
+			this.answerGroupBox.Size = new System.Drawing.Size(880, 290);
 			this.answerGroupBox.TabIndex = 35;
 			this.answerGroupBox.TabStop = false;
 			this.answerGroupBox.Text = "答案：";
@@ -134,70 +139,66 @@
 			// radioButtonFalse
 			// 
 			this.radioButtonFalse.AutoSize = true;
-			this.radioButtonFalse.Location = new System.Drawing.Point(600, 100);
+			this.radioButtonFalse.Location = new System.Drawing.Point(600, 140);
 			this.radioButtonFalse.Name = "radioButtonFalse";
 			this.radioButtonFalse.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonFalse.TabIndex = 35;
-			this.radioButtonFalse.TabStop = true;
 			this.radioButtonFalse.Text = "F";
 			this.radioButtonFalse.UseVisualStyleBackColor = true;
-			this.radioButtonFalse.Visible = false;
 			// 
 			// radioButtonTrue
 			// 
 			this.radioButtonTrue.AutoSize = true;
-			this.radioButtonTrue.Location = new System.Drawing.Point(280, 100);
+			this.radioButtonTrue.Location = new System.Drawing.Point(280, 140);
 			this.radioButtonTrue.Name = "radioButtonTrue";
 			this.radioButtonTrue.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonTrue.TabIndex = 34;
-			this.radioButtonTrue.TabStop = true;
 			this.radioButtonTrue.Text = "T";
-			this.radioButtonTrue.UseVisualStyleBackColor = true;
-			this.radioButtonTrue.Visible = false;
+			this.radioButtonTrue.UseVisualStyleBackColor = false;
 			// 
 			// checkBoxE
 			// 
 			this.checkBoxE.AutoSize = true;
-			this.checkBoxE.Location = new System.Drawing.Point(10, 150);
+			this.checkBoxE.Location = new System.Drawing.Point(10, 200);
 			this.checkBoxE.Name = "checkBoxE";
 			this.checkBoxE.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxE.TabIndex = 12;
+			this.checkBoxE.TabStop = false;
 			this.checkBoxE.Text = "E";
 			this.checkBoxE.UseVisualStyleBackColor = true;
-			this.checkBoxE.Visible = false;
 			// 
 			// checkBoxF
 			// 
 			this.checkBoxF.AutoSize = true;
-			this.checkBoxF.Location = new System.Drawing.Point(450, 150);
+			this.checkBoxF.Location = new System.Drawing.Point(450, 200);
 			this.checkBoxF.Name = "checkBoxF";
 			this.checkBoxF.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxF.TabIndex = 13;
+			this.checkBoxF.TabStop = false;
 			this.checkBoxF.Text = "F";
 			this.checkBoxF.UseVisualStyleBackColor = true;
-			this.checkBoxF.Visible = false;
 			// 
 			// checkBoxD
 			// 
 			this.checkBoxD.AutoSize = true;
-			this.checkBoxD.Location = new System.Drawing.Point(450, 90);
+			this.checkBoxD.Location = new System.Drawing.Point(450, 115);
 			this.checkBoxD.Name = "checkBoxD";
 			this.checkBoxD.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxD.TabIndex = 11;
+			this.checkBoxD.TabStop = false;
 			this.checkBoxD.Text = "D";
 			this.checkBoxD.UseVisualStyleBackColor = true;
-			this.checkBoxD.Visible = false;
 			// 
 			// checkBoxC
 			// 
 			this.checkBoxC.AutoSize = true;
-			this.checkBoxC.Location = new System.Drawing.Point(10, 90);
+			this.checkBoxC.Location = new System.Drawing.Point(10, 115);
 			this.checkBoxC.Name = "checkBoxC";
 			this.checkBoxC.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxC.TabIndex = 10;
+			this.checkBoxC.TabStop = false;
 			this.checkBoxC.Text = "C";
 			this.checkBoxC.UseVisualStyleBackColor = true;
-			this.checkBoxC.Visible = false;
 			// 
 			// checkBoxB
 			// 
@@ -206,9 +207,9 @@
 			this.checkBoxB.Name = "checkBoxB";
 			this.checkBoxB.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxB.TabIndex = 9;
+			this.checkBoxB.TabStop = false;
 			this.checkBoxB.Text = "B";
 			this.checkBoxB.UseVisualStyleBackColor = true;
-			this.checkBoxB.Visible = false;
 			// 
 			// checkBoxA
 			// 
@@ -217,59 +218,64 @@
 			this.checkBoxA.Name = "checkBoxA";
 			this.checkBoxA.Size = new System.Drawing.Size(54, 28);
 			this.checkBoxA.TabIndex = 8;
+			this.checkBoxA.TabStop = false;
 			this.checkBoxA.Text = "A";
 			this.checkBoxA.UseVisualStyleBackColor = true;
-			this.checkBoxA.Visible = false;
 			// 
 			// textBoxF
 			// 
-			this.textBoxF.Location = new System.Drawing.Point(510, 150);
+			this.textBoxF.Location = new System.Drawing.Point(510, 200);
 			this.textBoxF.Multiline = true;
 			this.textBoxF.Name = "textBoxF";
-			this.textBoxF.Size = new System.Drawing.Size(360, 55);
+			this.textBoxF.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxF.Size = new System.Drawing.Size(360, 80);
 			this.textBoxF.TabIndex = 19;
+			this.textBoxF.TabStop = false;
 			this.textBoxF.Text = "选项F";
-			this.textBoxF.Visible = false;
 			// 
 			// textBoxE
 			// 
-			this.textBoxE.Location = new System.Drawing.Point(70, 150);
+			this.textBoxE.Location = new System.Drawing.Point(70, 200);
 			this.textBoxE.Multiline = true;
 			this.textBoxE.Name = "textBoxE";
-			this.textBoxE.Size = new System.Drawing.Size(360, 55);
+			this.textBoxE.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxE.Size = new System.Drawing.Size(360, 80);
 			this.textBoxE.TabIndex = 18;
+			this.textBoxE.TabStop = false;
 			this.textBoxE.Text = "选项E";
-			this.textBoxE.Visible = false;
 			// 
 			// textBoxD
 			// 
-			this.textBoxD.Location = new System.Drawing.Point(510, 90);
+			this.textBoxD.Location = new System.Drawing.Point(510, 115);
 			this.textBoxD.Multiline = true;
 			this.textBoxD.Name = "textBoxD";
-			this.textBoxD.Size = new System.Drawing.Size(360, 55);
+			this.textBoxD.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxD.Size = new System.Drawing.Size(360, 80);
 			this.textBoxD.TabIndex = 17;
+			this.textBoxD.TabStop = false;
 			this.textBoxD.Text = "选项D";
-			this.textBoxD.Visible = false;
 			// 
 			// textBoxC
 			// 
-			this.textBoxC.Location = new System.Drawing.Point(70, 90);
+			this.textBoxC.Location = new System.Drawing.Point(70, 115);
 			this.textBoxC.Multiline = true;
 			this.textBoxC.Name = "textBoxC";
-			this.textBoxC.Size = new System.Drawing.Size(360, 55);
+			this.textBoxC.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxC.Size = new System.Drawing.Size(360, 80);
 			this.textBoxC.TabIndex = 16;
+			this.textBoxC.TabStop = false;
 			this.textBoxC.Text = "选项C";
-			this.textBoxC.Visible = false;
 			// 
 			// textBoxB
 			// 
 			this.textBoxB.Location = new System.Drawing.Point(510, 30);
 			this.textBoxB.Multiline = true;
 			this.textBoxB.Name = "textBoxB";
-			this.textBoxB.Size = new System.Drawing.Size(360, 55);
+			this.textBoxB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxB.Size = new System.Drawing.Size(360, 80);
 			this.textBoxB.TabIndex = 15;
+			this.textBoxB.TabStop = false;
 			this.textBoxB.Text = "选项B";
-			this.textBoxB.Visible = false;
 			// 
 			// radioButtonA
 			// 
@@ -281,17 +287,17 @@
 			this.radioButtonA.TabStop = true;
 			this.radioButtonA.Text = "A";
 			this.radioButtonA.UseVisualStyleBackColor = true;
-			this.radioButtonA.Visible = false;
 			// 
 			// textBoxA
 			// 
 			this.textBoxA.Location = new System.Drawing.Point(70, 30);
 			this.textBoxA.Multiline = true;
 			this.textBoxA.Name = "textBoxA";
-			this.textBoxA.Size = new System.Drawing.Size(360, 55);
+			this.textBoxA.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxA.Size = new System.Drawing.Size(360, 80);
 			this.textBoxA.TabIndex = 14;
+			this.textBoxA.TabStop = false;
 			this.textBoxA.Text = "选项A";
-			this.textBoxA.Visible = false;
 			// 
 			// radioButtonB
 			// 
@@ -303,55 +309,60 @@
 			this.radioButtonB.TabStop = true;
 			this.radioButtonB.Text = "B";
 			this.radioButtonB.UseVisualStyleBackColor = true;
-			this.radioButtonB.Visible = false;
 			// 
 			// radioButtonC
 			// 
 			this.radioButtonC.AutoSize = true;
-			this.radioButtonC.Location = new System.Drawing.Point(10, 90);
+			this.radioButtonC.Location = new System.Drawing.Point(10, 115);
 			this.radioButtonC.Name = "radioButtonC";
 			this.radioButtonC.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonC.TabIndex = 4;
 			this.radioButtonC.TabStop = true;
 			this.radioButtonC.Text = "C";
 			this.radioButtonC.UseVisualStyleBackColor = true;
-			this.radioButtonC.Visible = false;
 			// 
 			// radioButtonD
 			// 
 			this.radioButtonD.AutoSize = true;
-			this.radioButtonD.Location = new System.Drawing.Point(450, 90);
+			this.radioButtonD.Location = new System.Drawing.Point(450, 115);
 			this.radioButtonD.Name = "radioButtonD";
 			this.radioButtonD.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonD.TabIndex = 5;
 			this.radioButtonD.TabStop = true;
 			this.radioButtonD.Text = "D";
 			this.radioButtonD.UseVisualStyleBackColor = true;
-			this.radioButtonD.Visible = false;
 			// 
 			// radioButtonE
 			// 
 			this.radioButtonE.AutoSize = true;
-			this.radioButtonE.Location = new System.Drawing.Point(10, 150);
+			this.radioButtonE.Location = new System.Drawing.Point(10, 200);
 			this.radioButtonE.Name = "radioButtonE";
 			this.radioButtonE.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonE.TabIndex = 6;
 			this.radioButtonE.TabStop = true;
 			this.radioButtonE.Text = "E";
 			this.radioButtonE.UseVisualStyleBackColor = true;
-			this.radioButtonE.Visible = false;
 			// 
 			// radioButtonF
 			// 
 			this.radioButtonF.AutoSize = true;
-			this.radioButtonF.Location = new System.Drawing.Point(450, 150);
+			this.radioButtonF.Location = new System.Drawing.Point(450, 200);
 			this.radioButtonF.Name = "radioButtonF";
 			this.radioButtonF.Size = new System.Drawing.Size(53, 28);
 			this.radioButtonF.TabIndex = 7;
 			this.radioButtonF.TabStop = true;
 			this.radioButtonF.Text = "F";
 			this.radioButtonF.UseVisualStyleBackColor = true;
-			this.radioButtonF.Visible = false;
+			// 
+			// answerRichTextBox
+			// 
+			this.answerRichTextBox.Location = new System.Drawing.Point(20, 40);
+			this.answerRichTextBox.Name = "answerRichTextBox";
+			this.answerRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.answerRichTextBox.Size = new System.Drawing.Size(840, 240);
+			this.answerRichTextBox.TabIndex = 2;
+			this.answerRichTextBox.TabStop = false;
+			this.answerRichTextBox.Text = "";
 			// 
 			// questionMainRichTextBox
 			// 
@@ -431,112 +442,99 @@
 			// 
 			// prevButton
 			// 
-			this.prevButton.Location = new System.Drawing.Point(25, 500);
+			this.prevButton.Location = new System.Drawing.Point(5, 405);
 			this.prevButton.Name = "prevButton";
-			this.prevButton.Size = new System.Drawing.Size(100, 80);
+			this.prevButton.Size = new System.Drawing.Size(120, 60);
 			this.prevButton.TabIndex = 24;
+			this.prevButton.TabStop = false;
 			this.prevButton.Text = "上一题";
 			this.prevButton.UseVisualStyleBackColor = true;
 			this.prevButton.Click += new System.EventHandler(this.PrevButton_Click);
 			// 
 			// nextButton
 			// 
-			this.nextButton.Location = new System.Drawing.Point(1045, 500);
+			this.nextButton.Location = new System.Drawing.Point(1045, 405);
 			this.nextButton.Name = "nextButton";
-			this.nextButton.Size = new System.Drawing.Size(100, 80);
+			this.nextButton.Size = new System.Drawing.Size(120, 60);
 			this.nextButton.TabIndex = 26;
+			this.nextButton.TabStop = false;
 			this.nextButton.Text = "下一题";
 			this.nextButton.UseVisualStyleBackColor = true;
 			this.nextButton.Click += new System.EventHandler(this.NextButton_Click);
 			// 
-			// moveUpButton
-			// 
-			this.moveUpButton.Location = new System.Drawing.Point(25, 650);
-			this.moveUpButton.Name = "moveUpButton";
-			this.moveUpButton.Size = new System.Drawing.Size(100, 50);
-			this.moveUpButton.TabIndex = 27;
-			this.moveUpButton.Text = "上  移";
-			this.moveUpButton.UseVisualStyleBackColor = true;
-			this.moveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
-			// 
-			// moveDownButton
-			// 
-			this.moveDownButton.Location = new System.Drawing.Point(1045, 650);
-			this.moveDownButton.Name = "moveDownButton";
-			this.moveDownButton.Size = new System.Drawing.Size(100, 50);
-			this.moveDownButton.TabIndex = 28;
-			this.moveDownButton.Text = "下  移";
-			this.moveDownButton.UseVisualStyleBackColor = true;
-			this.moveDownButton.Click += new System.EventHandler(this.MoveDownButton_Click);
-			// 
-			// closeButton
-			// 
-			this.closeButton.Location = new System.Drawing.Point(525, 757);
-			this.closeButton.Name = "closeButton";
-			this.closeButton.Size = new System.Drawing.Size(120, 60);
-			this.closeButton.TabIndex = 29;
-			this.closeButton.Text = "关 闭";
-			this.closeButton.UseVisualStyleBackColor = true;
-			this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
-			// 
 			// deleteButton
 			// 
-			this.deleteButton.Location = new System.Drawing.Point(25, 757);
+			this.deleteButton.BackColor = System.Drawing.Color.Tomato;
+			this.deleteButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.deleteButton.Location = new System.Drawing.Point(5, 735);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(120, 60);
 			this.deleteButton.TabIndex = 30;
-			this.deleteButton.Text = "删除";
-			this.deleteButton.UseVisualStyleBackColor = true;
+			this.deleteButton.TabStop = false;
+			this.deleteButton.Text = "删 除";
+			this.deleteButton.UseVisualStyleBackColor = false;
 			this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
 			// 
 			// editButton
 			// 
-			this.editButton.Location = new System.Drawing.Point(1025, 757);
+			this.editButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.editButton.Location = new System.Drawing.Point(1045, 735);
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(120, 60);
 			this.editButton.TabIndex = 31;
-			this.editButton.Text = "编辑";
+			this.editButton.TabStop = false;
+			this.editButton.Text = "编 辑";
 			this.editButton.UseVisualStyleBackColor = true;
 			this.editButton.Click += new System.EventHandler(this.EditButton_Click);
 			// 
 			// removeButton
 			// 
-			this.removeButton.Location = new System.Drawing.Point(25, 380);
+			this.removeButton.BackColor = System.Drawing.Color.Salmon;
+			this.removeButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.removeButton.Location = new System.Drawing.Point(5, 515);
 			this.removeButton.Name = "removeButton";
-			this.removeButton.Size = new System.Drawing.Size(100, 50);
+			this.removeButton.Size = new System.Drawing.Size(120, 60);
 			this.removeButton.TabIndex = 32;
+			this.removeButton.TabStop = false;
 			this.removeButton.Text = "移 除";
-			this.removeButton.UseVisualStyleBackColor = true;
+			this.removeButton.UseVisualStyleBackColor = false;
 			this.removeButton.Click += new System.EventHandler(this.RemoveButton_Click);
 			// 
 			// addButton
 			// 
-			this.addButton.Location = new System.Drawing.Point(1045, 380);
+			this.addButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.addButton.Location = new System.Drawing.Point(1045, 515);
 			this.addButton.Name = "addButton";
-			this.addButton.Size = new System.Drawing.Size(100, 50);
+			this.addButton.Size = new System.Drawing.Size(120, 60);
 			this.addButton.TabIndex = 33;
+			this.addButton.TabStop = false;
 			this.addButton.Text = "添 加";
 			this.addButton.UseVisualStyleBackColor = true;
 			this.addButton.Click += new System.EventHandler(this.AddButton_Click);
 			// 
 			// submitButton
 			// 
-			this.submitButton.Location = new System.Drawing.Point(400, 757);
+			this.submitButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.submitButton.Location = new System.Drawing.Point(1045, 625);
 			this.submitButton.Name = "submitButton";
 			this.submitButton.Size = new System.Drawing.Size(120, 60);
 			this.submitButton.TabIndex = 34;
+			this.submitButton.TabStop = false;
 			this.submitButton.Text = "确 定";
 			this.submitButton.UseVisualStyleBackColor = true;
 			this.submitButton.Click += new System.EventHandler(this.SubmitButton_Click);
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Location = new System.Drawing.Point(650, 757);
+			this.cancelButton.BackColor = System.Drawing.Color.LightSalmon;
+			this.cancelButton.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+			this.cancelButton.Location = new System.Drawing.Point(5, 625);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(120, 60);
 			this.cancelButton.TabIndex = 35;
+			this.cancelButton.TabStop = false;
 			this.cancelButton.Text = "取 消";
-			this.cancelButton.UseVisualStyleBackColor = true;
+			this.cancelButton.UseVisualStyleBackColor = false;
 			this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
 			// precisionLabel
@@ -548,30 +546,11 @@
 			this.precisionLabel.Text = "答题准确率：00/00";
 			this.precisionLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// questionChildRichTextBox
-			// 
-			this.questionChildRichTextBox.Location = new System.Drawing.Point(10, 30);
-			this.questionChildRichTextBox.Name = "questionChildRichTextBox";
-			this.questionChildRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.questionChildRichTextBox.Size = new System.Drawing.Size(860, 75);
-			this.questionChildRichTextBox.TabIndex = 1;
-			this.questionChildRichTextBox.Text = "";
-			// 
-			// answerRichTextBox
-			// 
-			this.answerRichTextBox.Location = new System.Drawing.Point(20, 40);
-			this.answerRichTextBox.Name = "answerRichTextBox";
-			this.answerRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.answerRichTextBox.Size = new System.Drawing.Size(840, 155);
-			this.answerRichTextBox.TabIndex = 2;
-			this.answerRichTextBox.Text = "";
-			// 
 			// ItemContentForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1174, 829);
-			this.ControlBox = false;
 			this.Controls.Add(this.precisionLabel);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.submitButton);
@@ -579,9 +558,6 @@
 			this.Controls.Add(this.removeButton);
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.deleteButton);
-			this.Controls.Add(this.closeButton);
-			this.Controls.Add(this.moveDownButton);
-			this.Controls.Add(this.moveUpButton);
 			this.Controls.Add(this.nextButton);
 			this.Controls.Add(this.prevButton);
 			this.Controls.Add(this.labelQuestion);
@@ -593,9 +569,14 @@
 			this.Controls.Add(this.labelType);
 			this.Controls.Add(this.questionMainRichTextBox);
 			this.Controls.Add(this.childGroupBox);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "ItemContentForm";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.Text = "试题信息";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ItemContentForm_FormClosing);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ItemContentForm_FormClosed);
 			this.Load += new System.EventHandler(this.ItemContentForm_Load);
 			this.childGroupBox.ResumeLayout(false);
 			this.questionGroupBox.ResumeLayout(false);
@@ -631,9 +612,6 @@
 		private System.Windows.Forms.Label labelQuestion;
 		private System.Windows.Forms.Button prevButton;
 		private System.Windows.Forms.Button nextButton;
-		private System.Windows.Forms.Button moveUpButton;
-		private System.Windows.Forms.Button moveDownButton;
-		private System.Windows.Forms.Button closeButton;
 		private System.Windows.Forms.Button deleteButton;
 		private System.Windows.Forms.Button editButton;
 		private System.Windows.Forms.GroupBox answerGroupBox;

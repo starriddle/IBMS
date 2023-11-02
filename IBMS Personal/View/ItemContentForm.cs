@@ -1,6 +1,7 @@
 ﻿using IBMS_Personal.Entity;
 using IBMS_Personal.Service;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,13 @@ namespace IBMS_Personal.View
 		private void ItemContentForm_Load(object sender, EventArgs e)
 		{
 			SwitchMode();
+			precisionLabel.Text = string.Empty;
+			childGroupBox.Text = string.Empty;
+			questionGroupBox.Visible = answerRichTextBox.Visible = false;
+			radioButtonTrue.Visible = radioButtonFalse.Visible = false;
+			radioButtonOptions.ForEach(button => button.Visible = false);
+			checkBoxOptions.ForEach(box => box.Visible = false);
+			textBoxOptions.ForEach(box => box.Visible = false);
 			FillItemTypeComboBox();
 			if (mode != ItemViewMode.CREATE)
 			{
@@ -49,16 +57,7 @@ namespace IBMS_Personal.View
 						break;
 					}
 				}
-				questionMainRichTextBox.Text = content.Detail.Question;
-
-				if (content.Item.Flag == ItemExtendFlag.PARENT)
-				{
-					extendCheckBox.Checked = true;
-				}
-				else
-				{
-					FillChildGroupBox(0);
-				}
+				FillItemDetail();
 			}
 		}
 
@@ -78,17 +77,28 @@ namespace IBMS_Personal.View
 			// 编辑模式 = 新建/更新
 			bool editable = mode == ItemViewMode.CREATE || mode == ItemViewMode.UPDATE;
 
-			// 非编辑模式：显示关闭按钮
-			closeButton.Visible = !editable;
 			// 编辑模式：显示提交和取消按钮
 			submitButton.Visible = cancelButton.Visible = editable;
 
 			// 编辑模式：试题内容可编辑
 			questionMainRichTextBox.ReadOnly = questionChildRichTextBox.ReadOnly = answerRichTextBox.ReadOnly = !editable;
-			textBoxOptions.ForEach(box => box.ReadOnly = !editable);
 			radioButtonTrue.Enabled = radioButtonFalse.Enabled = editable;
 			radioButtonOptions.ForEach(button => button.Enabled = editable);
 			checkBoxOptions.ForEach(box => box.Enabled = editable);
+			textBoxOptions.ForEach(box => box.ReadOnly = !editable);
+		}
+
+		/// <summary>
+		/// 填充题型列表
+		/// </summary>
+		private void FillItemTypeComboBox()
+		{
+			this.itemTypeComboBox.Items.Clear();
+			List<ItemType> types = Services.ItemService.GetAllTypes();
+			for (int index = 0; index < types.Count; index++)
+			{
+				itemTypeComboBox.Items.Add(types[index]);
+			}
 		}
 
 		private void ItemTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,19 +115,6 @@ namespace IBMS_Personal.View
 						break;
 					}
 				}
-			}
-		}
-
-		/// <summary>
-		/// 填充题型列表
-		/// </summary>
-		private void FillItemTypeComboBox()
-		{
-			this.itemTypeComboBox.Items.Clear();
-			List<ItemType> types = Services.ItemService.GetAllTypes();
-			for (int index = 0; index < types.Count; index++)
-			{
-				itemTypeComboBox.Items.Add(types[index]);
 			}
 		}
 
@@ -144,35 +141,50 @@ namespace IBMS_Personal.View
 			// 切换为非扩展试题，显示试题内容
 			// TODO 保存当前信息
 			childIndex = 0;
-            FillChildGroupBox();
-        }
+			FillChildGroupBox();
+		}
 
 		// 填充答案信息
-		private void FillChildGroupBox(int index)
+		private void FillItemDetail()
 		{
-			childIndex = index;
-			ItemDetail detail;
+			questionMainRichTextBox.Text = content.Detail.Question;
 
 			if (mode == ItemViewMode.PRACTICE)
 			{
-				childGroupBox.Text = "答题准确率：" + content.Item.Correct + "/" + content.Item.Total;
+				precisionLabel.Text = "答题准确率：" + content.Item.Correct + "/" + content.Item.Total;
 			}
+
+			if (content.Item.Flag == ItemExtendFlag.PARENT)
+			{
+				extendCheckBox.Checked = true;
+			}
+			FillChildGroupBox();
+		}
+
+		// 填充答案信息
+		private void FillChildGroupBox()
+		{
+			ItemDetail detail;
+
 			if (extendCheckBox.Checked)
 			{
 				childGroupBox.Text = "第 " + (childIndex + 1) + " 题";
 				if (mode == ItemViewMode.PRACTICE)
 				{
-					childGroupBox.Text += "  答题准确率：" + content.Item.Correct + "/" + content.Item.Total;
+					childGroupBox.Text += "  答题准确率：" + content.Children[childIndex].Item.Correct + "/" + content.Children[childIndex].Item.Total;
 				}
 				detail = content.Children[childIndex].Detail;
-				prevButton.Visible = moveUpButton.Visible = childIndex == 0;
-				nextButton.Visible = moveDownButton.Visible = childIndex == content.Item.Number - 1;
+				questionGroupBox.Visible = true;
+				questionChildRichTextBox.Text = detail.Question;
+				prevButton.Visible = childIndex == 0;
+				nextButton.Visible = childIndex == content.Item.Number - 1;
+				removeButton.Visible = addButton.Visible = false;
 			}
 			else
 			{
-				questionGroupBox.Visible = false;
 				detail = content.Detail;
-				prevButton.Visible = nextButton.Visible = moveUpButton.Visible = moveDownButton.Visible = addButton.Visible = removeButton.Visible = false;
+				questionGroupBox.Visible = false;
+				prevButton.Visible = nextButton.Visible = addButton.Visible = removeButton.Visible = false;
 			}
 			ItemType type = (ItemType)itemTypeComboBox.SelectedItem;
 			switch (type.Family)
@@ -233,22 +245,6 @@ namespace IBMS_Personal.View
 			FillChildGroupBox();
 		}
 
-		private void MoveUpButton_Click(object sender, EventArgs e)
-		{
-			ItemContent temp = newContent.Children[childIndex];
-			newContent.Children.RemoveAt(childIndex);
-			newContent.Children.Insert(--childIndex, temp);
-			childGroupBox.Text = "第 " + (childIndex + 1) + "/" + newContent.Item.Number + " 题";
-		}
-
-		private void MoveDownButton_Click(object sender, EventArgs e)
-		{
-			ItemContent temp = newContent.Children[childIndex];
-			newContent.Children.RemoveAt(childIndex);
-			newContent.Children.Insert(++childIndex, temp);
-			childGroupBox.Text = "第 " + (childIndex + 1) + "/" + (newContent.Item.Number) + " 题";
-		}
-
 		/// <summary>
 		/// 添加子题，顺序在当前子题前面
 		/// </summary>
@@ -291,13 +287,11 @@ namespace IBMS_Personal.View
 		{
 			mode = ItemViewMode.UPDATE;
 			SwitchMode();
-            if (content.Item.Flag == ItemExtendFlag.PARENT)
-            {
+			if (content.Item.Flag == ItemExtendFlag.PARENT)
+			{
 				removeButton.Visible = addButton.Visible = true;
-				moveUpButton.Visible = childIndex > 0;
-				moveDownButton.Visible = childIndex < content.Item.Number - 1;
-            }
-        }
+			}
+		}
 
 		private void SubmitButton_Click(object sender, EventArgs e)
 		{
@@ -332,7 +326,7 @@ namespace IBMS_Personal.View
 			newContent = null;
 			mode = ItemViewMode.DETAIL;
 			SwitchMode();
-			removeButton.Visible = addButton.Visible = moveUpButton.Visible = moveDownButton.Visible = false;
+			removeButton.Visible = addButton.Visible =  false;
 		}
 
 		private void CancelButton_Click(object sender, EventArgs e)
@@ -346,7 +340,6 @@ namespace IBMS_Personal.View
 			}
 			else if (mode == ItemViewMode.CREATE)
 			{
-				mainForm.Enabled = true;
 				this.Close();
 			}
 		}
@@ -363,13 +356,6 @@ namespace IBMS_Personal.View
 				return;
 			}
 			MessageBox.Show("删除成功");
-			mainForm.Enabled = true;
-			this.Close();
-		}
-
-		private void CloseButton_Click(object sender, EventArgs e)
-		{
-			mainForm.Enabled = true;
 			this.Close();
 		}
 
@@ -383,6 +369,24 @@ namespace IBMS_Personal.View
 		internal void RefreshTypeData()
 		{
 			throw new NotImplementedException();
+		}
+
+		private void ItemContentForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (mode == ItemViewMode.UPDATE || mode == ItemViewMode.CREATE)
+			{
+				DialogResult result = MessageBox.Show("试题正在编辑，确定取消编辑并退出？",
+													  "退出编辑提示",
+													  MessageBoxButtons.OKCancel,
+													  MessageBoxIcon.Exclamation,
+													  MessageBoxDefaultButton.Button2);
+				if (result == DialogResult.Cancel) e.Cancel = true;
+			}
+		}
+
+		private void ItemContentForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			mainForm.Enabled = true;
 		}
 	}
 }
