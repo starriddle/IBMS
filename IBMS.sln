@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IBMS Personal", "IBMS Personal\IBMS Personal.csproj", "{940F88EA-9AD6-44A3-A255-EE941C5B4868}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{4646BAAA-61A8-4D48-82E2-70FCB5F2379F}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{940F88EA-9AD6-44A3-A255-EE941C5B4868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{940F88EA-9AD6-44A3-A255-EE941C5B4868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{940F88EA-9AD6-44A3-A255-EE941C5B4868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{940F88EA-9AD6-44A3-A255-EE941C5B4868}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9251D97-EE65-45B9-913D-7C67D1351DF1}
+	EndGlobalSection
+EndGlobal
