@@ -12,20 +12,20 @@ namespace IBMS_Personal.DAO
 
 		internal int CountByTypeId(long typeId)
 		{
-			string sql = "SELECT count(1) FROM item WHERE type_id = @typeId";
+			string sql = "SELECT count(1) FROM item WHERE type_id = @tid";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", typeId }
+				{ "@tid", typeId }
 			};
 			return Convert.ToInt32(SQLiteUtil.get().ExecuteScalar(sql, parameters));
 		}
 
 		internal List<Item> ListByTypeId(long typeId)
 		{
-			string sql = " SELECT * FROM item WHERE type_id = @typeId ORDER BY id ";
+			string sql = " SELECT * FROM item WHERE type_id = @tid ORDER BY id ";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", typeId }
+				{ "@tid", typeId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			List<Item> result = new List<Item>();
@@ -39,20 +39,20 @@ namespace IBMS_Personal.DAO
 
 		internal int CountByChapterId(long chapterId)
 		{
-			string sql = "SELECT count(1) FROM item WHERE chapter_id = @chapterId";
+			string sql = "SELECT count(1) FROM item WHERE chapter_id = @cid";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@chapterId", chapterId }
+				{ "@cid", chapterId }
 			};
 			return Convert.ToInt32(SQLiteUtil.get().ExecuteScalar(sql, parameters));
 		}
 
 		internal List<Item> ListByChapterId(long chapterId)
 		{
-			string sql = " SELECT * FROM item WHERE chapter_id = @chapterId ORDER BY id ";
+			string sql = " SELECT * FROM item WHERE chapter_id = @cid ORDER BY id ";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@chapterId", chapterId }
+				{ "@cid", chapterId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			List<Item> result = new List<Item>();
@@ -66,24 +66,24 @@ namespace IBMS_Personal.DAO
 
 		internal int CountByTypeIdAndFlag(long typeId, int extendFlag, bool flag)
 		{
-			StringBuilder sql = new StringBuilder("SELECT count(1) FROM item WHERE type_id = @typeId ");
-			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @extendFlag");
+			StringBuilder sql = new StringBuilder("SELECT count(1) FROM item WHERE type_id = @tid ");
+			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @flag");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", typeId },
-				{ "@extendFlag", extendFlag }
+				{ "@tid", typeId },
+				{ "@flag", extendFlag }
 			};
 			return Convert.ToInt32(SQLiteUtil.get().ExecuteScalar(sql.ToString(), parameters));
 		}
 
 		internal List<Item> ListByTypeIdAndFlag(long typeId, int extendFlag, bool flag)
 		{
-			StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE type_id = @typeId ");
-			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @extendFlag ").Append(" ORDER BY id");
+			StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE type_id = @tid ");
+			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @flag ").Append(" ORDER BY id");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", typeId },
-				{ "@extendFlag", extendFlag }
+				{ "@tid", typeId },
+				{ "@flag", extendFlag }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql.ToString(), parameters);
 			List<Item> result = new List<Item>();
@@ -97,24 +97,24 @@ namespace IBMS_Personal.DAO
 
 		internal int CountByChapterIdAndFlag(long chapterId, int extendFlag, bool flag)
 		{
-			StringBuilder sql = new StringBuilder("SELECT count(1) FROM item WHERE chapter_id = @chapterId ");
-			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @extendFlag");
+			StringBuilder sql = new StringBuilder("SELECT count(1) FROM item WHERE chapter_id = @cid ");
+			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @flag");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@chapterId", chapterId },
-				{ "@extendFlag", extendFlag }
+				{ "@cid", chapterId },
+				{ "@flag", extendFlag }
 			};
 			return Convert.ToInt32(SQLiteUtil.get().ExecuteScalar(sql.ToString(), parameters));
 		}
 
 		internal List<Item> ListByChapterIdAndFlag(long chapterId, int extendFlag, bool flag)
 		{
-			StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE chapter_id = @chapterId ");
-			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @extendFlag ").Append(" ORDER BY id");
+			StringBuilder sql = new StringBuilder("SELECT * FROM item WHERE chapter_id = @cid ");
+			sql.Append(" AND flag ").Append(flag ? " = " : " != ").Append(" @flag ").Append(" ORDER BY id");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@chapterId", chapterId },
-				{ "@extendFlag", extendFlag }
+				{ "@cid", chapterId },
+				{ "@flag", extendFlag }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql.ToString(), parameters);
 			List<Item> result = new List<Item>();
@@ -128,10 +128,10 @@ namespace IBMS_Personal.DAO
 
 		internal List<Item> ListByParentId(long parentId)
 		{
-			string sql = "SELECT * FROM item WHERE parent_id = @parentId ORDER BY id";
+			string sql = "SELECT * FROM item WHERE parent_id = @pid ORDER BY id";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@parentId", parentId }
+				{ "@pid", parentId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			List<Item> result = new List<Item>();
@@ -145,7 +145,7 @@ namespace IBMS_Personal.DAO
 
 		internal Item Insert(Item item)
 		{
-			string sql = "INSERT INTO item (type_id, chapter_id, flag, number, parent_id) VALUES (@tid, @cid, @flag, @num, @pid) RETURNING *";
+			string sql = "INSERT INTO item (id, type_id, chapter_id, flag, number, parent_id) VALUES (@id, @tid, @cid, @flag, @num, @pid) RETURNING *";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
 				{ "@tid", item.TypeId },
@@ -154,6 +154,14 @@ namespace IBMS_Personal.DAO
 				{ "@num", item.Number },
 				{ "@pid", item.ParentId }
 			};
+			if (item.Id == 0)
+			{
+				parameters.Add("@id", null);
+			}
+			else
+			{
+				parameters.Add("@id", item.Id);
+			}
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			Item result = null;
 			if (reader.Read())
@@ -174,18 +182,28 @@ namespace IBMS_Personal.DAO
 			return SQLiteUtil.get().ExecuteNonQuery(sql, parameters);
 		}
 
-		internal int Update(Item item)
+		internal int DeleteByParentId(long parentId)
 		{
-			string sql = "Update item SET type_id = @typeId, chapter_id = @chapterId, flag = @flag, number = @number, parent_id = @parentId, correct = @correct, total = @total WHERE id = @id";
+			string sql = "DELETE FROM item WHERE parent_id = @pid";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", item.TypeId },
-				{ "@chapterId", item.ChapterId },
+				{ "@pid", parentId }
+			};
+			return SQLiteUtil.get().ExecuteNonQuery(sql, parameters);
+		}
+
+		internal int Update(Item item)
+		{
+			string sql = "Update item SET type_id = @tid, chapter_id = @cid, flag = @flag, number = @num, parent_id = @pid, correct = @co, total = @to WHERE id = @id";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
+			{
+				{ "@tid", item.TypeId },
+				{ "@cid", item.ChapterId },
 				{ "@flag", item.Flag },
-				{ "@number", item.Number },
-				{ "@ParentId", item.ParentId },
-				{ "@correct", item.Correct },
-				{ "@total", item.Total },
+				{ "@num", item.Number },
+				{ "@pid", item.ParentId },
+				{ "@co", item.Correct },
+				{ "@to", item.Total },
 				{ "@id", item.Id }
 			};
 			return SQLiteUtil.get().ExecuteNonQuery(sql, parameters);
@@ -193,11 +211,11 @@ namespace IBMS_Personal.DAO
 
 		internal int UpdatePracticeLog(Item item)
 		{
-			string sql = "Update item SET correct = @correct, total = @total WHERE id = @id";
+			string sql = "Update item SET correct = @co, total = @to WHERE id = @id";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@correct", item.Correct },
-				{ "@total", item.Total },
+				{ "@co", item.Correct },
+				{ "@to", item.Total },
 				{ "@id", item.Id }
 			};
 			return SQLiteUtil.get().ExecuteNonQuery(sql, parameters);

@@ -55,7 +55,7 @@
 		}
 
 		private static ItemDetailDAO itemDetailDao;
-		internal static ItemDetailDAO ItemDetailDAO
+		internal static ItemDetailDAO ItemDetailDao
 		{
 			get
 			{
@@ -68,7 +68,7 @@
 		}
 
 		private static ExamLogDAO examLogDao;
-		internal static ExamLogDAO ExamLogDAO
+		internal static ExamLogDAO ExamLogDao
 		{
 			get
 			{

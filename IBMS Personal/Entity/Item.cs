@@ -26,7 +26,7 @@ namespace IBMS_Personal.Entity
 
 		/// <summary>
 		/// 扩展标记
-		/// 0-非扩展题(默认)，1-父题，2-子题
+		/// 0-非扩展题(默认)，1-子题，2-父题
 		/// </summary>
 		public int Flag { get; set; }
 
@@ -57,7 +57,7 @@ namespace IBMS_Personal.Entity
 		/// </summary>
 		/// <param name="reader"></param>
 		/// <returns></returns>
-		internal static Item ConvertFrom(SQLiteDataReader reader)
+		public static Item ConvertFrom(SQLiteDataReader reader)
 		{
 			return new Item
 			{
@@ -70,6 +70,20 @@ namespace IBMS_Personal.Entity
 				Correct = reader.GetInt32(6),
 				Total = reader.GetInt32(7)
 			};
+		}
+		
+		public Item Copy()
+		{
+			Item item = new Item();
+			item.Id = Id;
+			item.TypeId = TypeId;
+			item.ChapterId = ChapterId;
+			item.Flag = Flag;
+			item.Number = Number;
+			item.ParentId = ParentId;
+			item.Correct = Correct;
+			item.Total = Total;
+			return item;
 		}
 	}
 }

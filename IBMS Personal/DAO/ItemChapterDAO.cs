@@ -10,10 +10,10 @@ namespace IBMS_Personal.DAO
 
 		internal List<ItemChapter> ListByTypeId(long typeId)
 		{
-			string sql = string.Format("SELECT * FROM item_chapter WHERE type_id = @typeId ORDER BY id");
+			string sql = string.Format("SELECT * FROM item_chapter WHERE type_id = @tid ORDER BY id");
 			Dictionary<string, object> paremeters = new Dictionary<string, object>
 			{
-				{ "@typeId", typeId }
+				{ "@tid", typeId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, paremeters);
 			List<ItemChapter> result = new List<ItemChapter>();
@@ -27,13 +27,21 @@ namespace IBMS_Personal.DAO
 
 		internal ItemChapter Insert(ItemChapter chapter)
 		{
-			string sql = "INSERT INTO item_chapter (type_id, name) VALUES (@typeId, @name) RETURNING *";
-			Dictionary<string, object> paremeters = new Dictionary<string, object>
+			string sql = "INSERT INTO item_chapter (id, type_id, name) VALUES (@id, @tid, @name) RETURNING *";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@typeId", chapter.TypeId },
+				{ "@tid", chapter.TypeId },
 				{ "@name", chapter.Name }
 			};
-			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, paremeters);
+			if (chapter.Id == 0)
+			{
+				parameters.Add("@id", null);
+			}
+			else
+			{
+				parameters.Add("@id", chapter.Id);
+			}
+			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			ItemChapter result = null;
 			if (reader.Read())
 			{

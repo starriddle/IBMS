@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace IBMS_Personal.Entity
 {
@@ -31,12 +32,22 @@ namespace IBMS_Personal.Entity
 			return this;
 		}
 
-		public ItemContent Copy()
+		public ItemContent SimplyCopy()
 		{
 			ItemContent content = new ItemContent(Item, Detail);
 			foreach (ItemContent child in Children)
 			{
-				content.AddChild(child.Copy());
+				content.AddChild(child.SimplyCopy());
+			}
+			return content;
+		}
+
+		public ItemContent FullyCopy()
+		{
+			ItemContent content = new ItemContent(Item.Copy(), Detail.Copy());
+			foreach (ItemContent child in Children)
+			{
+				content.AddChild(child.FullyCopy());
 			}
 			return content;
 		}

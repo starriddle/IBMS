@@ -64,24 +64,23 @@ namespace IBMS_Personal.Entity
 		/// </summary>
 		/// <param name="reader"></param>
 		/// <returns></returns>
-		internal static ItemDetail ConvertFrom(SQLiteDataReader reader)
+		public static ItemDetail ConvertFrom(SQLiteDataReader reader)
 		{
-			ItemDetail detail = new ItemDetail
-			{
-				Id = reader.GetInt64(0),
-				ParentId = reader.GetInt64(1),
-				Number = reader.GetInt32(2),
-				Answer = reader.GetString(3),
-				Question = reader.GetString(4)
-			};
+			ItemDetail detail = new ItemDetail();
+
+			detail.Id = reader.GetInt64(0);
+			detail.ParentId = reader.GetInt64(1);
+			detail.Number = reader.GetInt32(2);
+			detail.Answer = (reader.IsDBNull(3)) ? null : reader.GetString(3);
+			detail.Question = (reader.IsDBNull(4)) ? null : reader.GetString(4);
 			for (int i = 0; i < detail.Number; i++)
 			{
-				detail.AddOption(reader.GetString(5 + i));
+				detail.AddOption((reader.IsDBNull(5 + i)) ? null : reader.GetString(5 + i));
 			}
 			return detail;
 		}
 
-		internal ItemDetail ShuffleOptions()
+		public ItemDetail ShuffleOptions()
 		{
 			if (Number == 0) return this;
 			List<string> newOptions = CollectionUtil.Shuffle(Options);
@@ -101,7 +100,7 @@ namespace IBMS_Personal.Entity
 			return this;
 		}
 
-		internal StringBuilder ToFormatString()
+		public StringBuilder ToFormatString()
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append(Question);
@@ -110,6 +109,21 @@ namespace IBMS_Personal.Entity
 				sb.Append("\n\t").Append((char)('A' + i)).Append(".\t").Append(Options[i]);
 			}
 			return sb;
+		}
+
+		public ItemDetail Copy()
+		{
+			ItemDetail detail = new ItemDetail();
+			detail.Id = Id;
+			detail.ParentId = ParentId;
+			detail.Number = Number;
+			detail.Answer = Answer;
+			detail.Question = Question;
+			foreach (string option in Options)
+			{
+				detail.AddOption(option);
+			}
+			return detail;
 		}
 	}
 }

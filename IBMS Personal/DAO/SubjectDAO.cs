@@ -3,6 +3,7 @@ using IBMS_Personal.Util;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace IBMS_Personal.DAO
 {
@@ -11,20 +12,20 @@ namespace IBMS_Personal.DAO
 
 		internal int CountByParentId(long parentId)
 		{
-			string sql = "SELECT COUNT(1) FROM subject WHERE parent_id = @parentId";
+			string sql = "SELECT COUNT(1) FROM subject WHERE parent_id = @pid";
 			Dictionary<string, object> paremeters = new Dictionary<string, object>
 			{
-				{ "@parentId", parentId }
+				{ "@pid", parentId }
 			};
 			return Convert.ToInt32(SQLiteUtil.get().ExecuteScalar(sql, paremeters));
 		}
 
 		internal List<Subject> ListByParentId(long parentId)
 		{
-			string sql = "SELECT * FROM subject WHERE parent_id = @parentId ORDER BY id";
+			string sql = "SELECT * FROM subject WHERE parent_id = @pid ORDER BY id";
 			Dictionary<string, object> paremeters = new Dictionary<string, object>
 			{
-				{ "@parentId", parentId }
+				{ "@pid", parentId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, paremeters);
 			List<Subject> result = new List<Subject>();
@@ -38,14 +39,22 @@ namespace IBMS_Personal.DAO
 
 		internal Subject Insert(Subject subject)
 		{
-			string sql = "INSERT INTO subject (parent_id, flag, name) VALUES (@parentId, @flag, @name) RETURNING *";
-			Dictionary<string, object> paremeters = new Dictionary<string, object>
+			string sql = "INSERT INTO subject (parent_id, flag, name) VALUES (@pid, @flag, @name) RETURNING *";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@parentId", subject.ParentId },
+				{ "@pid", subject.ParentId },
 				{ "@flag", subject.Flag },
 				{ "@name", subject.Name }
 			};
-			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, paremeters);
+			if (subject.Id == 0)
+			{
+				parameters.Add("@id", null);
+			}
+			else
+			{
+				parameters.Add("@id", subject.Id);
+			}
+			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			Subject result = null;
 			if (reader.Read())
 			{

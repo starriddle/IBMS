@@ -66,11 +66,11 @@ namespace IBMS_Personal.Service
 				{
 					continue;
 				}
-				ExamItem examItem = new ExamItem(items[i], DAOs.ItemDetailDAO.SelectById(items[i].Id).ShuffleOptions());
+				ExamItem examItem = new ExamItem(items[i], DAOs.ItemDetailDao.SelectById(items[i].Id).ShuffleOptions());
 				if (items[i].Flag == ItemExtendFlag.PARENT)
 				{
 					List<Item> childItems = DAOs.ItemDao.ListByParentId(items[i].Id);
-					List<ItemDetail> childItemDetails = DAOs.ItemDetailDAO.ListByParentId(items[i].Id);
+					List<ItemDetail> childItemDetails = DAOs.ItemDetailDao.ListByParentId(items[i].Id);
 					for (int childIndex = 0; childIndex < childItems.Count; childIndex++)
 					{
 						examItem.AddChild(new ExamItem(childItems[childIndex], childItemDetails[childIndex].ShuffleOptions()));
@@ -101,7 +101,7 @@ namespace IBMS_Personal.Service
 				TotalTime = setting.TotalTime,
 				Structure = setting.Show()
 			};
-			int count = DAOs.ExamLogDAO.InsertWithoutId(log);
+			int count = DAOs.ExamLogDao.InsertWithoutId(log);
 			if (count != 1)
 			{
 				throw new IBMSException("插入数据失败，原因未知");
@@ -110,12 +110,12 @@ namespace IBMS_Personal.Service
 
 		internal int CountLogs()
 		{
-			return DAOs.ExamLogDAO.Count();
+			return DAOs.ExamLogDao.Count();
 		}
 
 		internal List<ExamLog> GetExamLogsByPage(int pageIndex, int pageSize)
 		{
-			return DAOs.ExamLogDAO.SelectByPage(pageIndex, pageSize);
+			return DAOs.ExamLogDao.SelectByPage(pageIndex, pageSize);
 		}
 	}
 }

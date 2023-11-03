@@ -381,6 +381,7 @@
 			this.itemChapterComboBox.Name = "itemChapterComboBox";
 			this.itemChapterComboBox.Size = new System.Drawing.Size(300, 32);
 			this.itemChapterComboBox.TabIndex = 17;
+			this.itemChapterComboBox.SelectedIndexChanged += new System.EventHandler(this.itemChapterComboBox_SelectedIndexChanged);
 			// 
 			// itemTypeComboBox
 			// 

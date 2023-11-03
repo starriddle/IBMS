@@ -1,5 +1,6 @@
 ﻿using IBMS_Personal.Entity;
 using IBMS_Personal.Util;
+using NPOI.SS.Formula.Functions;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
@@ -28,10 +29,10 @@ namespace IBMS_Personal.DAO
 
 		internal List<ItemDetail> ListByParentId(long parentId)
 		{
-			string sql = "SELECT * FROM item_detail WHERE parent_id = @parentId ORDER BY id";
+			string sql = "SELECT * FROM item_detail WHERE parent_id = @pid ORDER BY id";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@parentId", parentId }
+				{ "@pid", parentId }
 			};
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			List<ItemDetail> result = new List<ItemDetail>();
@@ -49,18 +50,25 @@ namespace IBMS_Personal.DAO
 		/// </summary>
 		/// <param name="detail"></param>
 		/// <returns></returns>
-		internal int Insert(ItemDetail detail)
+		internal ItemDetail Insert(ItemDetail detail)
 		{
-			StringBuilder sql = new StringBuilder("INSERT INTO item_detail VALUES (@id, @parentId, @number, @answer, @question, @first, @second, @third, @fourth, @fifth, @sixth)");
+			StringBuilder sql = new StringBuilder("INSERT INTO item_detail VALUES (@id, @pid, @num, @an, @qu, @1st, @2nd, @3rd, @4th, @5th, @6th) RETURNING *");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@id", detail.Id },
-				{ "@parentId", detail.ParentId },
-				{ "@number", detail.Number },
-				{ "@answer", detail.Answer },
-				{ "@question", detail.Question }
+				{ "@pid", detail.ParentId },
+				{ "@num", detail.Number },
+				{ "@an", detail.Answer },
+				{ "@qu", detail.Question }
 			};
-			List<string> keys = new List<string>() { "@first", "@second", "@third", "@fourth", "@fifth", "@sixth" };
+			if (detail.Id == 0)
+			{
+				parameters.Add("@id", null);
+			}
+			else
+			{
+				parameters.Add("@id", detail.Id);
+			}
+			List<string> keys = new List<string>() { "@1st", "@2nd", "@3rd", "@4th", "@5th", "@6th" };
 			for (int i = 0; i< detail.Number; i++)
 			{
 				parameters.Add(keys[i], detail.Options[i]);
@@ -69,47 +77,33 @@ namespace IBMS_Personal.DAO
 			{
 				parameters.Add(keys[i], null);
 			}
-			return SQLiteUtil.get().ExecuteNonQuery(sql.ToString(), parameters);
+			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql.ToString(), parameters);
+			ItemDetail result = null;
+			if (reader.Read())
+			{
+				result = ItemDetail.ConvertFrom(reader);
+			}
+			reader.Close();
+			return result;
 		}
 
 		internal int Update(ItemDetail detail)
 		{
-			StringBuilder sql = new StringBuilder("UPDATE item_detail SET parent_id = @parentId, number = @number, answer = @answer, question = @question ");
+			StringBuilder sql = new StringBuilder("UPDATE item_detail SET parent_id = @pid, number = @num, answer = @an, question = @qu ");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@parentId", detail.ParentId },
-				{ "@number", detail.Number },
-				{ "@answer", detail.Answer },
-				{ "@question", detail.Question }
+				{ "@pid", detail.ParentId },
+				{ "@num", detail.Number },
+				{ "@an", detail.Answer },
+				{ "@qu", detail.Question }
 			};
-			switch (detail.Number)
+
+			List<string> columns = new List<string>() { "first", "second", "third", "fourth", "fifth", "sixth" };
+			List<string> keys = new List<string>() { "@1st", "@2nd", "@3rd", "@4th", "@5th", "@6th" };
+			for (int i = 0; i < detail.Number; i++)
 			{
-				case 6:
-					sql.Append(" , sixth = @sixth ");
-					parameters.Add("@sixth", detail.Options[5]);
-					goto case 5;
-				case 5:
-					sql.Append(" , fifth = @fifth ");
-					parameters.Add("@fifth", detail.Options[4]);
-					goto case 4;
-				case 4:
-					sql.Append(" , fourth = @fourth ");
-					parameters.Add("@fourth", detail.Options[3]);
-					goto case 3;
-				case 3:
-					sql.Append(" , third = @third ");
-					parameters.Add("@third", detail.Options[2]);
-					goto case 2;
-				case 2:
-					sql.Append(" , second = @second ");
-					parameters.Add("@second", detail.Options[1]);
-					goto case 1;
-				case 1:
-					sql.Append(" , first = @first ");
-					parameters.Add("@first", detail.Options[0]);
-					break;
-				default:
-					break;
+				sql.Append(" , ").Append(columns[i]).Append(" = ").Append(keys[i]).Append(" ");
+				parameters.Add(keys[i], detail.Options[i]);
 			}
 			sql.Append(" WHERE id = @id");
 			parameters.Add("@id", detail.Id);
@@ -128,10 +122,10 @@ namespace IBMS_Personal.DAO
 
 		internal int DeleteByParentId(long parentId)
 		{
-			string sql = "DELETE FROM item_detail WHERE parent_id = @parentId";
+			string sql = "DELETE FROM item_detail WHERE parent_id = @pid";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@parentId", parentId }
+				{ "@pid", parentId }
 			};
 			return SQLiteUtil.get().ExecuteNonQuery(sql, parameters);
 		}

@@ -91,15 +91,15 @@ namespace IBMS_Personal.Service
 
 		internal ItemContent GetDetailedContent(ItemContent simpleContent, bool shuffleOptions)
 		{
-			ItemContent result = simpleContent.Copy();
+			ItemContent result = simpleContent.SimplyCopy();
 
-			ItemDetail detail = DAOs.ItemDetailDAO.SelectById(result.Item.Id);
+			ItemDetail detail = DAOs.ItemDetailDao.SelectById(result.Item.Id);
 			if (shuffleOptions) detail.ShuffleOptions();
 			result.Detail = detail;
 
 			if (result.Item.Flag == ItemExtendFlag.PARENT)
 			{
-				List<ItemDetail> details = DAOs.ItemDetailDAO.ListByParentId(result.Item.Id);
+				List<ItemDetail> details = DAOs.ItemDetailDao.ListByParentId(result.Item.Id);
 				for (int i = 0; i < details.Count; i++)
 				{
 					if (shuffleOptions) details[i].ShuffleOptions();
@@ -138,7 +138,7 @@ namespace IBMS_Personal.Service
 				foreach (ItemContent child in content.Children)
 				{
 					count1 = DAOs.ItemDao.DeleteById(child.Item.Id);
-					count2 = DAOs.ItemDetailDAO.DeleteById(child.Item.Id);
+					count2 = DAOs.ItemDetailDao.DeleteById(child.Item.Id);
 					if (count1 != 1 || count2 != 1)
 					{
 						string message = string.Format("删除试题失败：id={0}, parentId={1}", child.Item.Id, child.Item.ParentId);
@@ -146,7 +146,7 @@ namespace IBMS_Personal.Service
 					}
 				}
 				count1 = DAOs.ItemDao.DeleteById(content.Item.Id);
-				count2 = DAOs.ItemDetailDAO.DeleteById(content.Item.Id);
+				count2 = DAOs.ItemDetailDao.DeleteById(content.Item.Id);
 				if (count1 != 1 || count2 != 1)
 				{
 					string message = string.Format("删除试题失败：id={0}", content.Item.Id);
@@ -162,31 +162,23 @@ namespace IBMS_Personal.Service
 			}
 		}
 
-		internal bool UpdateContent(ItemContent content)
+		internal ItemContent UpdateContent(ItemContent content)
 		{
 			SQLiteTransaction transaction = SQLiteUtil.get().BeginTransaction();
 			try
 			{
-				int count1, count2;
+				DAOs.ItemDao.Update(content.Item);
+				DAOs.ItemDetailDao.Update(content.Detail);
+				DAOs.ItemDao.DeleteByParentId(content.Item.Id);
+				DAOs.ItemDetailDao.DeleteByParentId(content.Item.Id);
 				foreach (ItemContent child in content.Children)
 				{
-					count1 = DAOs.ItemDao.Update(child.Item);
-					count2 = DAOs.ItemDetailDAO.Update(child.Detail);
-					if (count1 != 1 || count2 != 1)
-					{
-						string message = string.Format("更新试题失败：id={0}, parentId={1}", child.Item.Id, child.Item.ParentId);
-						throw new Exception(message);
-					}
-				}
-				count1 = DAOs.ItemDao.Update(content.Item);
-				count2 = DAOs.ItemDetailDAO.Update(content.Detail);
-				if (count1 != 1 || count2 != 1)
-				{
-					string message = string.Format("更新试题失败：id={0}", content.Item.Id);
-					throw new Exception(message);
+					child.Item = DAOs.ItemDao.Insert(child.Item);
+					child.Detail.Id = child.Item.Id;
+					child.Detail = DAOs.ItemDetailDao.Insert(child.Detail);
 				}
 				transaction.Commit();
-				return true;
+				return content;
 			}
 			catch (Exception ex)
 			{
@@ -195,20 +187,23 @@ namespace IBMS_Personal.Service
 			}
 		}
 
-		internal bool CreateContent(ItemContent content)
+		internal ItemContent CreateContent(ItemContent content)
 		{
 			SQLiteTransaction transaction = SQLiteUtil.get().BeginTransaction();
 			try
 			{
-				DAOs.ItemDao.Insert(content.Item);
-				DAOs.ItemDetailDAO.Insert(content.Detail);
+				content.Item = DAOs.ItemDao.Insert(content.Item);
+				content.Detail.Id = content.Item.Id;
+				content.Detail = DAOs.ItemDetailDao.Insert(content.Detail);
 				foreach (ItemContent child in content.Children)
 				{
-					DAOs.ItemDao.Insert(child.Item);
-					DAOs.ItemDetailDAO.Insert(child.Detail);
+					child.Item.ParentId = child.Detail.ParentId = content.Item.Id;
+					child.Item = DAOs.ItemDao.Insert(child.Item);
+					child.Detail.Id = child.Item.Id;
+					child.Detail = DAOs.ItemDetailDao.Insert(child.Detail);
 				}
 				transaction.Commit();
-				return true;
+				return content;
 			}
 			catch (Exception ex)
 			{

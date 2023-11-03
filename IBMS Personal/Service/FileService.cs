@@ -86,12 +86,12 @@ namespace IBMS_Personal.Service
 			{
 				Item item = DAOs.ItemDao.Insert(content.Item);
 				content.Detail.Id = item.Id;
-				DAOs.ItemDetailDAO.Insert(content.Detail);
+				DAOs.ItemDetailDao.Insert(content.Detail);
 				foreach (ItemContent child in content.Children)
 				{
 					child.Detail.ParentId = child.Item.ParentId = item.Id;
 					child.Detail.Id = DAOs.ItemDao.Insert(child.Item).Id;
-					DAOs.ItemDetailDAO.Insert(child.Detail);
+					DAOs.ItemDetailDao.Insert(child.Detail);
 				}
 			}
         }
@@ -236,7 +236,7 @@ namespace IBMS_Personal.Service
 					List<Item> items = DAOs.ItemDao.ListByChapterIdAndFlag(chapter.Id, ItemExtendFlag.CHILD, false);
                     foreach (Item item in items)
                     {
-						ItemDetail detail = DAOs.ItemDetailDAO.SelectById(item.Id);
+						ItemDetail detail = DAOs.ItemDetailDao.SelectById(item.Id);
 						if (detail == null) continue;
 						ItemContent content = new ItemContent(item, detail);
 						if (item.Flag == ItemExtendFlag.PARENT)
@@ -245,7 +245,7 @@ namespace IBMS_Personal.Service
 							List<Item> childItems = DAOs.ItemDao.ListByParentId(item.Id);
                             foreach (Item childItem in childItems)
                             {
-								ItemDetail childDetail = DAOs.ItemDetailDAO.SelectById(childItem.Id);
+								ItemDetail childDetail = DAOs.ItemDetailDao.SelectById(childItem.Id);
 								if (childDetail == null) continue;
 								content.AddChild(new ItemContent(childItem, childDetail));
                             }

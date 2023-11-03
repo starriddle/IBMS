@@ -16,17 +16,25 @@ namespace IBMS_Personal.DAO
 
 		internal int InsertWithoutId(ExamLog log)
 		{
-			string sql = "INSERT INTO exam_log (start_time, score, duration, total_score, total_time, structure) VALUES (@startTime, @score, @duration, @totalScore, @totalTime, @structure)";
-			Dictionary<string, object> paremeters = new Dictionary<string, object>
+			string sql = "INSERT INTO exam_log (id, start_time, score, duration, total_score, total_time, structure) VALUES (@id, @st, @score, @dt, @ts, @tt, @str)";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
-				{ "@startTime", log.StartTime.ToString() },
+				{ "@st", log.StartTime.ToString() },
 				{ "@score", log.Score },
-				{ "@duration", log.Duration.ToString() },
-				{ "@totalScore", log.TotalScore },
-				{ "@totalTime", log.TotalTime.ToString() },
-				{ "@structure", log.Structure }
+				{ "@dt", log.Duration.ToString() },
+				{ "@ts", log.TotalScore },
+				{ "@tt", log.TotalTime.ToString() },
+				{ "@str", log.Structure }
 			};
-			int count = SQLiteUtil.get().ExecuteNonQuery(sql, paremeters);
+			if (log.Id == 0)
+			{
+				parameters.Add("@id", null);
+			}
+			else
+			{
+				parameters.Add("@id", log.Id);
+			}
+			int count = SQLiteUtil.get().ExecuteNonQuery(sql, parameters);
 			return count;
 		}
 
