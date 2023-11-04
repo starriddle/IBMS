@@ -84,13 +84,13 @@ namespace IBMS_Personal.Service
 		{
             foreach (ItemContent content in contents)
 			{
-				Item item = DAOs.ItemDao.Insert(content.Item);
+				Item item = DAOs.ItemDao.InsertWithoutId(content.Item);
 				content.Detail.Id = item.Id;
 				DAOs.ItemDetailDao.Insert(content.Detail);
 				foreach (ItemContent child in content.Children)
 				{
 					child.Detail.ParentId = child.Item.ParentId = item.Id;
-					child.Detail.Id = DAOs.ItemDao.Insert(child.Item).Id;
+					child.Detail.Id = DAOs.ItemDao.InsertWithoutId(child.Item).Id;
 					DAOs.ItemDetailDao.Insert(child.Detail);
 				}
 			}

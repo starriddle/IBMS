@@ -24,21 +24,13 @@ namespace IBMS_Personal.DAO
 
 		internal ItemType Insert(ItemType itemType)
 		{
-			string sql = "INSERT INTO item_type (id, name, flag, family) VALUES (@id, @name, @flag, @family) RETURNING *";
+			string sql = "INSERT INTO item_type (name, flag, family) VALUES (@name, @flag, @family) RETURNING *";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
 				{ "@name", itemType.Name },
 				{ "@flag", itemType.Flag },
 				{ "@family", itemType.Family }
 			};
-			if (itemType.Id == 0)
-			{
-				parameters.Add("@id", null);
-			}
-			else
-			{
-				parameters.Add("@id", itemType.Id);
-			}
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			ItemType result = null;
 			if (reader.Read())

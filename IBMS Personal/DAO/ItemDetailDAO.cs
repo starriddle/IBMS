@@ -55,19 +55,12 @@ namespace IBMS_Personal.DAO
 			StringBuilder sql = new StringBuilder("INSERT INTO item_detail VALUES (@id, @pid, @num, @an, @qu, @1st, @2nd, @3rd, @4th, @5th, @6th) RETURNING *");
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
+				{ "@id", detail.Id },
 				{ "@pid", detail.ParentId },
 				{ "@num", detail.Number },
 				{ "@an", detail.Answer },
 				{ "@qu", detail.Question }
 			};
-			if (detail.Id == 0)
-			{
-				parameters.Add("@id", null);
-			}
-			else
-			{
-				parameters.Add("@id", detail.Id);
-			}
 			List<string> keys = new List<string>() { "@1st", "@2nd", "@3rd", "@4th", "@5th", "@6th" };
 			for (int i = 0; i< detail.Number; i++)
 			{

@@ -1,5 +1,6 @@
 ﻿using IBMS_Personal.Entity;
 using IBMS_Personal.Util;
+using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -46,14 +47,6 @@ namespace IBMS_Personal.DAO
 				{ "@flag", subject.Flag },
 				{ "@name", subject.Name }
 			};
-			if (subject.Id == 0)
-			{
-				parameters.Add("@id", null);
-			}
-			else
-			{
-				parameters.Add("@id", subject.Id);
-			}
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			Subject result = null;
 			if (reader.Read())
@@ -71,6 +64,23 @@ namespace IBMS_Personal.DAO
 				{ "@id", id }
 			};
 			return SQLiteUtil.get().ExecuteNonQuery(sql, paremeters);
+		}
+
+		internal Subject GetById(long id)
+		{
+			string sql = "SELECT * FROM subject WHERE id = @id";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
+			{
+				{ "@id", id }
+			};
+			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
+			Subject result = null;
+			if (reader.Read())
+			{
+				result = Subject.ConvertFrom(reader);
+			}
+			reader.Close();
+			return result;
 		}
 	}
 }

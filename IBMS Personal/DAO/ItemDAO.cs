@@ -143,9 +143,31 @@ namespace IBMS_Personal.DAO
 			return result;
 		}
 
-		internal Item Insert(Item item)
+		internal Item InsertWithId(Item item)
 		{
 			string sql = "INSERT INTO item (id, type_id, chapter_id, flag, number, parent_id) VALUES (@id, @tid, @cid, @flag, @num, @pid) RETURNING *";
+			Dictionary<string, object> parameters = new Dictionary<string, object>
+			{
+				{ "@id", item.Id },
+				{ "@tid", item.TypeId },
+				{ "@cid", item.ChapterId },
+				{ "@flag", item.Flag },
+				{ "@num", item.Number },
+				{ "@pid", item.ParentId }
+			};
+			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
+			Item result = null;
+			if (reader.Read())
+			{
+				result = Item.ConvertFrom(reader);
+			}
+			reader.Close();
+			return result;
+		}
+
+		internal Item InsertWithoutId(Item item)
+		{
+			string sql = "INSERT INTO item (type_id, chapter_id, flag, number, parent_id) VALUES (@tid, @cid, @flag, @num, @pid) RETURNING *";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
 				{ "@tid", item.TypeId },
@@ -154,14 +176,6 @@ namespace IBMS_Personal.DAO
 				{ "@num", item.Number },
 				{ "@pid", item.ParentId }
 			};
-			if (item.Id == 0)
-			{
-				parameters.Add("@id", null);
-			}
-			else
-			{
-				parameters.Add("@id", item.Id);
-			}
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			Item result = null;
 			if (reader.Read())

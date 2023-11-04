@@ -24,6 +24,11 @@ namespace IBMS_Personal.Service
 			DAOs.SubjectDao.DeleteById(subject.Id);
 		}
 
+		internal Subject GetSubjectById(long id)
+		{
+			return DAOs.SubjectDao.GetById(id);
+		}
+
 		internal int CountSubjectsByParentGroup(Subject group)
 		{
 			return DAOs.SubjectDao.CountByParentId(group.Id);

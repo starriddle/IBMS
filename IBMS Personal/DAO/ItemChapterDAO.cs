@@ -27,20 +27,12 @@ namespace IBMS_Personal.DAO
 
 		internal ItemChapter Insert(ItemChapter chapter)
 		{
-			string sql = "INSERT INTO item_chapter (id, type_id, name) VALUES (@id, @tid, @name) RETURNING *";
+			string sql = "INSERT INTO item_chapter (type_id, name) VALUES (@tid, @name) RETURNING *";
 			Dictionary<string, object> parameters = new Dictionary<string, object>
 			{
 				{ "@tid", chapter.TypeId },
 				{ "@name", chapter.Name }
 			};
-			if (chapter.Id == 0)
-			{
-				parameters.Add("@id", null);
-			}
-			else
-			{
-				parameters.Add("@id", chapter.Id);
-			}
 			SQLiteDataReader reader = SQLiteUtil.get().ExcuteReader(sql, parameters);
 			ItemChapter result = null;
 			if (reader.Read())

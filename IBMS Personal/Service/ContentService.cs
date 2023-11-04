@@ -173,7 +173,7 @@ namespace IBMS_Personal.Service
 				DAOs.ItemDetailDao.DeleteByParentId(content.Item.Id);
 				foreach (ItemContent child in content.Children)
 				{
-					child.Item = DAOs.ItemDao.Insert(child.Item);
+					child.Item = child.Item.Id == 0 ? DAOs.ItemDao.InsertWithoutId(child.Item) : DAOs.ItemDao.InsertWithId(child.Item);
 					child.Detail.Id = child.Item.Id;
 					child.Detail = DAOs.ItemDetailDao.Insert(child.Detail);
 				}
@@ -192,13 +192,13 @@ namespace IBMS_Personal.Service
 			SQLiteTransaction transaction = SQLiteUtil.get().BeginTransaction();
 			try
 			{
-				content.Item = DAOs.ItemDao.Insert(content.Item);
+				content.Item = DAOs.ItemDao.InsertWithoutId(content.Item);
 				content.Detail.Id = content.Item.Id;
 				content.Detail = DAOs.ItemDetailDao.Insert(content.Detail);
 				foreach (ItemContent child in content.Children)
 				{
 					child.Item.ParentId = child.Detail.ParentId = content.Item.Id;
-					child.Item = DAOs.ItemDao.Insert(child.Item);
+					child.Item = DAOs.ItemDao.InsertWithoutId(child.Item);
 					child.Detail.Id = child.Item.Id;
 					child.Detail = DAOs.ItemDetailDao.Insert(child.Detail);
 				}
