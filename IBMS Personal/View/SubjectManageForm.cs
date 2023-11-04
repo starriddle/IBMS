@@ -27,7 +27,30 @@ namespace IBMS_Personal.View
 		private void SubjectManageForm_Load(object sender, EventArgs e)
 		{
 			mainForm.Text = "通用题库管理系统";
-			InitForm();
+			Subject currentSubject = mainForm.GetSubject();
+
+			if (currentSubject == null)
+			{
+				InitForm();
+				return;
+			}
+			Subject group = Services.SubjectService.GetSubjectById(currentSubject.ParentId);
+			while (group != null)
+			{
+				selectedGroupListBox.Items.Insert(0, group);
+				group = Services.SubjectService.GetSubjectById(group.ParentId);
+			}
+			RefreshCurrentListBox();
+			RefreshSelectLabel();
+			foreach (Subject subject in currentSubjectListBox.Items)
+			{
+				if (subject.Id == currentSubject.Id)
+				{
+					currentSubjectListBox.SelectedItem = subject;
+					selectSubjectButton.PerformClick();
+					break;
+				}
+			}
 		}
 
 		private void InitButton_Click(object sender, EventArgs e)
@@ -40,9 +63,7 @@ namespace IBMS_Personal.View
 			// 初始化界面
 			this.selectedGroupListBox.Items.Clear();
 			this.backButton.Enabled = false;
-
 			this.nameBox.Text = "";
-
 			RefreshCurrentListBox();
 			RefreshSelectLabel();
 		}
@@ -149,7 +170,7 @@ namespace IBMS_Personal.View
 			this.selectGroupButton.Enabled = false;
 
 			Subject group = (Subject)currentSubjectListBox.SelectedItem;
-			// TODO 如果分类下为空，则删除分类，否则提示无法删除，需要操作数据库
+			// 如果分类下为空，则删除分类，否则提示无法删除，需要操作数据库
 			int count = Services.SubjectService.CountSubjectsByParentGroup(group);
 			if (count > 0)
 			{
@@ -161,13 +182,16 @@ namespace IBMS_Personal.View
 			try
 			{
 				Services.SubjectService.DeleteSubject(group);
-				this.currentGroupListBox.SelectedIndex = -1;
-				this.currentGroupListBox.Items.Remove(group);
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show("删除分类出现错误：\n" + ex.Message, "异常提示");
+				this.deleteGroupButton.Enabled = true;
+				this.selectGroupButton.Enabled = true;
+				return;
 			}
+			this.currentGroupListBox.SelectedIndex = -1;
+			this.currentGroupListBox.Items.Remove(group);
 		}
 
 		private void DeleteSubjectButton_Click(object sender, EventArgs e)
@@ -176,18 +200,21 @@ namespace IBMS_Personal.View
 			this.selectSubjectButton.Enabled = false;
 
 			Subject subject = (Subject)currentSubjectListBox.SelectedItem;
-			// TODO 删除 科目表 条目，以及对应的科目数据库
+			// 删除 科目表 条目，以及对应的科目数据库
 			try
 			{
-				Services.SubjectService.DeleteSubject(subject);
-				this.currentSubjectListBox.SelectedIndex = -1;
-				this.currentSubjectListBox.Items.Remove(subject);
 				FileUtil.DeleteDBFile(subject.Id);
+				Services.SubjectService.DeleteSubject(subject);
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show("删除科目出现错误：\n" + ex.Message, "异常提示");
+				this.deleteSubjectButton.Enabled = true;
+				this.selectSubjectButton.Enabled = true;
+				return;
 			}
+			this.currentSubjectListBox.SelectedIndex = -1;
+			this.currentSubjectListBox.Items.Remove(subject);
 		}
 
 		private void AddGroupButton_Click(object sender, EventArgs e)
@@ -290,7 +317,7 @@ namespace IBMS_Personal.View
 			{
 				MessageBox.Show("添加科目出现错误：\n" + ex.Message, "异常提示");
 			}
-			addGroupButton.Enabled = true;
+			addSubjectButton.Enabled = true;
 		}
 
 		private void CancelButton_Click(object sender, EventArgs e)
@@ -321,7 +348,6 @@ namespace IBMS_Personal.View
 		{
 			if (mainForm.GetSubject() != null)
 			{
-
 				mainForm.Text = "[" + mainForm.GetSubject().Name + "]";
 			}
 		}
