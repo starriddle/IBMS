@@ -190,6 +190,7 @@ namespace IBMS_Personal.View
 				addModuleButton.Enabled = true;
 				return;
 			}
+			existLastSetting = false;
 			setting.AddModule(module);
 			setting.TotalScore = totalScore;
 			setting.TotalTime = new TimeSpan(totalTime / 60, totalTime % 60, 0);
@@ -224,7 +225,8 @@ namespace IBMS_Personal.View
 				finishSettingButton.Enabled = true;
 				return;
 			}
-			int totalScore2 = setting.CountScore();
+			ExamSetting finalSetting = existLastSetting ? mainForm.ExamSetting : setting;
+			int totalScore2 = finalSetting.CountScore();
 			if (totalScore2 != totalScore)
 			{
 				StringBuilder sb = new StringBuilder("试题统计分值：").Append(totalScore2)
@@ -234,9 +236,9 @@ namespace IBMS_Personal.View
 				finishSettingButton.Enabled = true;
 				return;
 			}
-			setting.TotalScore = totalScore;
-			setting.TotalTime = new TimeSpan(totalTime / 60, totalTime % 60, 0);
-			mainForm.ExamSetting = setting;
+			finalSetting.TotalScore = totalScore;
+			finalSetting.TotalTime = new TimeSpan(totalTime / 60, totalTime % 60, 0);
+			mainForm.ExamSetting = finalSetting;
 			ExamForm examForm = new ExamForm(mainForm);
 			examForm.Show();
 			finishSettingButton.Enabled = true;
