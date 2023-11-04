@@ -235,7 +235,7 @@ namespace IBMS_Personal.Util
 			/// </summary>
 			public const int CREATE = 3;
 
-			public static readonly string[] titles = { "练习记录", "试题详情", "试题编辑", "新建试题" };
+			public static readonly string[] titles = { "练习详情", "试题详情", "试题编辑", "新建试题" };
 		}
 	}
 }
