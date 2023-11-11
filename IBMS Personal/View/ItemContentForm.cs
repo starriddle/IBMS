@@ -1,13 +1,10 @@
 ﻿using IBMS_Personal.Entity;
 using IBMS_Personal.Service;
-using ICSharpCode.SharpZipLib.Zip;
-using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static IBMS_Personal.Util.Constants;
-using static ICSharpCode.SharpZipLib.Zip.ExtendedUnixData;
 
 namespace IBMS_Personal.View
 {

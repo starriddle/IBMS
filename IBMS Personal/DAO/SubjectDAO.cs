@@ -1,10 +1,8 @@
 ﻿using IBMS_Personal.Entity;
 using IBMS_Personal.Util;
-using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace IBMS_Personal.DAO
 {
