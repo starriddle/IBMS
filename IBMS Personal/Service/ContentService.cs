@@ -50,7 +50,6 @@ namespace IBMS_Personal.Service
 		/// </summary>
 		/// <param name="list">列表</param>
 		/// <param name="order">顺序</param>
-		/// <param name="idOrder">顺序一致的元素是否按编号排序</param>
 		/// <returns></returns>
 		private List<ItemContent> SortContentListByOrder(List<ItemContent> list, int order)
 		{
