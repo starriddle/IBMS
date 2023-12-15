@@ -251,7 +251,6 @@ namespace IBMS_Personal.Util
 						parent.AddChild(content);
 						if (parent.Item.Number == parent.Children.Count)
 						{
-							result.Add(parent);
 							parent = null;
 						}
 					}
